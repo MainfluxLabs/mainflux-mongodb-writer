@@ -33,7 +33,7 @@ For quick questions and suggestions you can also use GitHub Issues.
 [@mainflux](https://twitter.com/mainflux)
 
 ### Authors
-Main architect and BDFL of Mainflux project is [@drasko](https://github.com/drasko). Additionaly, initial version of Mainflux was architectured and crafted by [@janko-isidorovic](https://github.com/janko-isidorovic), [@nmarcetic](https://github.com/nmarcetic) and [@mijicd](https://github.com/mijicd).
+Main architect and BDFL of Mainflux project is [@drasko](https://github.com/drasko). Additionaly, initial version of Mainflux was architectured and crafted by [@janko-isidorovic](https://github.com/janko-isidorovic), [@nmarcetic](https://github.com/nmarcetic), [@mijicd](https://github.com/mijicd) and [@darkodraskovic](https://github.com/darkodraskovic)
 
 Maintainers are listed in [MAINTAINERS](MAINTAINERS) file.
 
