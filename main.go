@@ -70,15 +70,16 @@ func writerHandler(nm *nats.Msg) {
 
 	println("Calling writeMessage()")
 	fmt.Println(m.Publisher, m.Protocol, m.Channel, m.Payload)
+	writeMessage(m)
 }
 
 func main() {
 	opts := Opts{}
 
-	flag.StringVar(&opts.MongoHost, "m", "mongo", "MongoDB address.")
+	flag.StringVar(&opts.MongoHost, "m", "localhost", "MongoDB address.")
 	flag.StringVar(&opts.MongoPort, "p", "27017", "MongoDB port.")
 	flag.StringVar(&opts.MongoDatabase, "d", "mainflux", "MongoDB database name.")
-	flag.StringVar(&opts.NatsHost, "n", "nats", "NATS broker address.")
+	flag.StringVar(&opts.NatsHost, "n", "localhost", "NATS broker address.")
 	flag.StringVar(&opts.NatsPort, "q", "4222", "NATS broker port.")
 	flag.BoolVar(&opts.Help, "h", false, "Show help.")
 	flag.BoolVar(&opts.Help, "help", false, "Show help.")
@@ -111,14 +112,12 @@ func main() {
 }
 
 var banner = `
-   ____ ___  ____  ____  ____  ____  ____/ / /_       _      _______(_) /____  _____
-  / __ '__ \/ __ \/ __ \/ __ \/ __ \/ __  / __ \_____| | /| / / ___/ / __/ _ \/ ___/
- / / / / / / /_/ / / / / /_/ / /_/ / /_/ / /_/ /_____| |/ |/ / /  / / /_/  __/ /    
-/_/ /_/ /_/\____/_/ /_/\__, /\____/\__,_/_.___/      |__/|__/_/  /_/\__/\___/_/     
-                      /____/                                                        
+┌┬┐┌─┐┌┐┌┌─┐┌─┐┌┬┐┌┐    ┬ ┬┬─┐┬┌┬┐┌─┐┬─┐
+││││ │││││ ┬│ │ ││├┴┐───│││├┬┘│ │ ├┤ ├┬┘
+┴ ┴└─┘┘└┘└─┘└─┘─┴┘└─┘   └┴┘┴└─┴ ┴ └─┘┴└─
 
-                      == Industrial IoT System ==
-                     Made with <3 by Mainflux Team
+      == Industrial IoT System ==
+     Made with <3 by Mainflux Team
 [w] http://mainflux.io
 [t] @mainflux
 `
