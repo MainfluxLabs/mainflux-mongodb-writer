@@ -1,5 +1,5 @@
 ###
-# Mainflux Dockerfile
+# Mainflux MongoDB Writer Dockerfile
 ###
 
 FROM golang:alpine
@@ -15,26 +15,20 @@ ENV NATS_PORT 4222
 # Install
 ###
 
-RUN apk update && apk add git && apk add wget && rm -rf /var/cache/apk/*
-
 # Copy the local package files to the container's workspace.
-ADD . /go/src/github.com/mainflux/mainflux-core
-
-RUN mkdir -p /etc/mainflux/core
-COPY config/config-docker.toml /etc/mainflux/core/config.toml
-
-# Get and install the dependencies
-RUN go get github.com/mainflux/mainflux-core
+ADD . /go/src/github.com/mainflux/mainflux-mongodb-writer
+RUN cd /go/src/github.com/mainflux/mainflux-mongodb-writer && go install
 
 # Dockerize
 ENV DOCKERIZE_VERSION v0.2.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-	&& tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+ADD https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz dockerize.tar.gz
+RUN tar -C /usr/local/bin -xzf dockerize.tar.gz && rm -f dockerize.tar.gz
+
 
 ###
 # Run main command with dockerize
 ###
 CMD dockerize -wait tcp://$MONGO_HOST:$MONGO_PORT \
 				-wait tcp://$NATS_HOST:$NATS_PORT \
-				-timeout 10s /go/bin/mainflux-core /etc/mainflux/core/config.toml
+				-timeout 10s /go/bin/mainflux-mongodb-writer -m MONGO_HOST -n NATS_HOST
 
