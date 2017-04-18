@@ -1,8 +1,8 @@
 # Mainflux MongoDB Writer
 
 [![License](https://img.shields.io/badge/license-Apache%20v2.0-blue.svg)](LICENSE)
-[![Build Status](https://travis-ci.org/mainflux/mainflux-core.svg?branch=master)](https://travis-ci.org/mainflux/mainflux-core)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mainflux/mainflux-core)](https://goreportcard.com/report/github.com/mainflux/mainflux-core)
+[![Build Status](https://travis-ci.org/mainflux/mainflux-mongodb-writer.svg?branch=master)](https://travis-ci.org/mainflux/mainflux-mongodb-writer)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mainflux/mainflux-mongodb-writer)](https://goreportcard.com/report/github.com/mainflux/mainflux-mongodb-writer)
 [![Join the chat at https://gitter.im/Mainflux/mainflux](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Mainflux/mainflux?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Worker service behind NATS broker that fetches messages and writes them into MongoDB.
