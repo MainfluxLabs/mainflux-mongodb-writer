@@ -105,7 +105,7 @@ func main() {
 	color.Cyan(banner)
 
 	// Subscribe to NATS
-	NatsConn.Subscribe("mainflux/http/msg", writerHandler)
+	NatsConn.Subscribe("msg.*", writerHandler)
 
 	// Prevent program to exit
 	runtime.Goexit()
