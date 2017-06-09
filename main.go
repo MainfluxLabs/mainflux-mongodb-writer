@@ -18,6 +18,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/cenkalti/backoff"
 	"github.com/mainflux/mainflux-mongodb-writer/db"
 )
 
@@ -46,16 +47,34 @@ type (
 	}
 
 	NatsMsg struct {
-		Channel   string `json:"channel"`
-		Publisher string `json:"publisher"`
-		Protocol  string `json:"protocol"`
-		Payload   []byte `json:"payload"`
+		Channel     string `json:"channel"`
+		Publisher   string `json:"publisher"`
+		Protocol    string `json:"protocol"`
+		ContentType string `json:"content_type"`
+		Payload     []byte `json:"payload"`
 	}
 )
 
 var (
 	NatsConn *nats.Conn
+	opts     Opts
 )
+
+func tryMongoInit() error {
+	var err error
+
+	log.Print("Connecting to MongoDB... ")
+	err = db.InitMongo(opts.MongoHost, opts.MongoPort, opts.MongoDatabase)
+	return err
+}
+
+func tryNatsConnect() error {
+	var err error
+
+	log.Print("Connecting to NATS... ")
+	NatsConn, err = nats.Connect("nats://" + opts.NatsHost + ":" + opts.NatsPort)
+	return err
+}
 
 func writerHandler(nm *nats.Msg) {
 	fmt.Printf("Received a message: %s\n", string(nm.Data))
@@ -74,8 +93,6 @@ func writerHandler(nm *nats.Msg) {
 }
 
 func main() {
-	opts := Opts{}
-
 	flag.StringVar(&opts.MongoHost, "m", "localhost", "MongoDB address.")
 	flag.StringVar(&opts.MongoPort, "p", "27017", "MongoDB port.")
 	flag.StringVar(&opts.MongoDatabase, "d", "mainflux", "MongoDB database name.")
@@ -92,13 +109,18 @@ func main() {
 	}
 
 	// MongoDb
-	db.InitMongo(opts.MongoHost, opts.MongoPort, opts.MongoDatabase)
+	// Connect to MongoDB
+	if err := backoff.Retry(tryMongoInit, backoff.NewExponentialBackOff()); err != nil {
+		log.Fatalf("MongoDd: Can't connect: %v\n", err)
+	} else {
+		log.Println("OK")
+	}
 
 	// Connect to NATS broker
-	var err error
-	NatsConn, err = nats.Connect("nats://" + opts.NatsHost + ":" + opts.NatsPort)
-	if err != nil {
+	if err := backoff.Retry(tryNatsConnect, backoff.NewExponentialBackOff()); err != nil {
 		log.Fatalf("NATS: Can't connect: %v\n", err)
+	} else {
+		log.Println("OK")
 	}
 
 	// Print banner

@@ -58,6 +58,7 @@ func writeMessage(nm NatsMsg) error {
 		m.Channel = nm.Channel
 		m.Publisher = nm.Publisher
 		m.Protocol = nm.Protocol
+		m.ContentType = nm.ContentType
 		m.Timestamp = t
 
 		// Insert message in DB
