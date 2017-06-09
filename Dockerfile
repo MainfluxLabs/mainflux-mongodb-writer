@@ -1,5 +1,5 @@
 ###
-# Mainflux GTTP Sender Dockerfile
+# Mainflux MongoDB Writer Dockerfile
 ###
 
 FROM golang:alpine
