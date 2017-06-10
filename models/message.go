@@ -72,10 +72,13 @@ type (
 		////
 		Publisher   string `json:"publisher"`
 		Protocol    string `json:"protocol"`
-		Timestamp   string `json:"timestamp"`
+		Created     string `json:"created"`
 		ContentType string `json:"content_type"`
 
 		// Channel to which this message belongs
 		Channel string `json:"channel"`
+
+		// Blob
+		Payload []byte `json:"payload,omitempty"`
 	}
 )

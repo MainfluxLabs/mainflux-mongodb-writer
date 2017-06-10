@@ -27,39 +27,62 @@ func writeMessage(nm NatsMsg) error {
 	Db.Init()
 	defer Db.Close()
 
-	var s senml.SenML
-	var err error
-	if s, err = senml.Decode(nm.Payload, senml.JSON); err != nil {
-		println("ERROR")
-		return err
-	}
-
-	// Normalize (i.e. resolve) SenMLRecord
-	sn := senml.Normalize(s)
-
 	// Timestamp
 	t := time.Now().UTC().Format(time.RFC3339)
-	for _, r := range sn.Records {
 
+	switch nm.ContentType {
+	case "senml+json":
+		var s senml.SenML
+		var err error
+		if s, err = senml.Decode(nm.Payload, senml.JSON); err != nil {
+			println("ERROR")
+			return err
+		}
+
+		// Normalize (i.e. resolve) SenMLRecord
+		sn := senml.Normalize(s)
+		for _, r := range sn.Records {
+
+			m := models.Message{}
+
+			// Copy SenMLRecord struct to Message struct
+			b, err := json.Marshal(r)
+			if err != nil {
+				log.Print(err)
+				return err
+			}
+			if err := json.Unmarshal(b, &m); err != nil {
+				log.Print(err)
+				return err
+			}
+
+			// Fill-in Mainflux stuff
+			m.Channel = nm.Channel
+			m.Publisher = nm.Publisher
+			m.Protocol = nm.Protocol
+			m.ContentType = nm.ContentType
+			m.Created = t
+
+			// Insert message in DB
+			if err := Db.C("messages").Insert(m); err != nil {
+				log.Print(err)
+				return err
+			}
+		}
+
+	case "octet-stream":
 		m := models.Message{}
 
-		// Copy SenMLRecord struct to Message struct
-		b, err := json.Marshal(r)
-		if err != nil {
-			log.Print(err)
-			return err
-		}
-		if err := json.Unmarshal(b, &m); err != nil {
-			log.Print(err)
-			return err
-		}
+		m.Payload = nm.Payload
+
+		m.Time = float64(time.Now().Unix())
 
 		// Fill-in Mainflux stuff
 		m.Channel = nm.Channel
 		m.Publisher = nm.Publisher
 		m.Protocol = nm.Protocol
 		m.ContentType = nm.ContentType
-		m.Timestamp = t
+		m.Created = t
 
 		// Insert message in DB
 		if err := Db.C("messages").Insert(m); err != nil {
