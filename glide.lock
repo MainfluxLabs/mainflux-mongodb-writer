@@ -1,0 +1,41 @@
+hash: 7ed5d3924343b5413cd027ce4a64e4cbd89ccd8ff6d649e5eb22af95f5289012
+updated: 2017-06-10T03:06:35.016368845+02:00
+imports:
+- name: github.com/cenkalti/backoff
+  version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
+- name: github.com/cisco/senml
+  version: 157479c25a2fcba03d0eb9d5bb237a079e4a07cb
+- name: github.com/fatih/color
+  version: 570b54cabe6b8eb0bc2dfce68d964677d63b5260
+- name: github.com/mattn/go-colorable
+  version: 5411d3eea5978e6cdc258b30de592b60df6aba96
+  repo: https://github.com/mattn/go-colorable
+- name: github.com/mattn/go-isatty
+  version: 57fdcb988a5c543893cc61bce354a6e24ab70022
+  repo: https://github.com/mattn/go-isatty
+- name: github.com/nats-io/go-nats
+  version: 61923ed1eaf8398000991fbbee2ef11ab5a5be0d
+- name: github.com/nats-io/nats
+  version: 78145d4f747094ee85af39b3e169ee98e4be5b03
+  subpackages:
+  - encoders/builtin
+  - util
+- name: github.com/nats-io/nuid
+  version: 3cf34f9fca4e88afa9da8eabd75e3326c9941b44
+- name: github.com/ugorji/go
+  version: 708a42d246822952f38190a8d8c4e6b16a0e600c
+  subpackages:
+  - codec
+- name: golang.org/x/sys
+  version: e24f485414aeafb646f6fca458b0bf869c0880a1
+  repo: https://go.googlesource.com/sys
+  subpackages:
+  - unix
+- name: gopkg.in/mgo.v2
+  version: 3f83fa5005286a7fe593b055f0d7771a7dce4655
+  subpackages:
+  - bson
+  - internal/json
+  - internal/sasl
+  - internal/scram
+testImports: []
